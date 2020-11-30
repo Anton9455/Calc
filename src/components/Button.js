@@ -1,36 +1,30 @@
 import React from 'react'
-import { connect, useDispatch, useSelector } from "react-redux";
-import { calc, equally } from "../redux/actions";
-import { CALC, EQUALLY } from '../redux/types';
+import { connect, useDispatch } from "react-redux";
+import { calc, clear, comma, equally, leftBracket, positiveOrNegative, removeValue, rightBracket } from "../redux/actions";
+import { CLEAR_VALUE, COMMA_VALUE, EQUALLY_VALUE, LEFT_BRACKET_VALUE, POSITIVE_OR_NEGATIVE_VALUE, REMOVE_VALUE, RIGHT_BRACKET_VALUE } from '../redux/types';
 
 
 
 const Button = ({ button }) => {
-    const dispatch = useDispatch();
-    const clickHandler = (event) =>{
-        debugger;
-        switchBtn(event.target.textContent);
-    }
+  const dispatch = useDispatch();
+  const clickHandler = (event) => {
+    switchBtn(event.target.textContent);
+  }
 
-    const switchBtn = (val) => {
-        switch (val) {
-          case "=": return dispatch(equally());
-          case ",":
-            break;
-          case "C":
-            break;
-          case "AC":
-            break;
-          case "(":
-            break;
-          case ")":
-            break;
-          case "+/-":
-            break;
-            default:
-            return dispatch(calc(val));
-          }
-        }
+  const switchBtn = (val) => {
+    switch (val) {
+      case EQUALLY_VALUE: return dispatch(equally());
+      case COMMA_VALUE:
+      case ",": return dispatch(comma());
+      case CLEAR_VALUE: return dispatch(clear())
+      case LEFT_BRACKET_VALUE: return dispatch(leftBracket())
+      case RIGHT_BRACKET_VALUE: return dispatch(rightBracket());
+      case POSITIVE_OR_NEGATIVE_VALUE: return dispatch(positiveOrNegative())
+      case REMOVE_VALUE: return dispatch(removeValue());
+      default:
+        return dispatch(calc(val));
+    }
+  }
 
   return (
     <div className={button.size}>
@@ -42,7 +36,7 @@ const Button = ({ button }) => {
 };
 
 const mapDispatchToProps = {
-    calc
+  calc
 }
 
 export default connect(null, mapDispatchToProps)(Button)

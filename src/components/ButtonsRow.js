@@ -6,7 +6,7 @@ export default ({ row, isAdditional }) => {
       {row.map((button, index) => {
         if (isAdditional) {
           return (
-            <div className={`w-100 ${index ? "mt-1" : ""}`}>
+            <div className={`w-100 ${index ? "mt-1" : ""}`} key={index}>
               <Button key={index} button={button} />
             </div>
           );

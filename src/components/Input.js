@@ -1,5 +1,7 @@
 export default ({ input, defalutValue, value }) => {
-    debugger;
+
+  const inputChangedHandler = (event) => { }
+
   return (
     <div className={input.style}>
       <input
@@ -8,7 +10,8 @@ export default ({ input, defalutValue, value }) => {
         className="form-control"
         id={input.id}
         defaultValue={defalutValue}
-        value = {value}
+        value={value}
+        onChange={(event) => inputChangedHandler(event)}
       />
     </div>
   );

@@ -1,3 +1,4 @@
+import { REMOVE_VALUE, CLEAR_VALUE, RIGHT_BRACKET_VALUE, LEFT_BRACKET_VALUE, POSITIVE_OR_NEGATIVE_VALUE } from "../redux/types";
 import Buttons from "./Buttons";
 import InputResult from "./InputResult";
 import InputSet from "./InputSet";
@@ -37,11 +38,11 @@ const buttons = [
 
 const additional = [
   [
-    { text: "C", size: sizeAdditional },
-    { text: "AC", size: sizeAdditional },
-    { text: "(", size: sizeAdditional },
-    { text: ")", size: sizeAdditional },
-    { text: "+/-", size: sizeAdditional },
+    { text: REMOVE_VALUE, size: sizeAdditional },
+    { text: CLEAR_VALUE, size: sizeAdditional },
+    { text: LEFT_BRACKET_VALUE, size: sizeAdditional },
+    { text: RIGHT_BRACKET_VALUE, size: sizeAdditional },
+    { text: POSITIVE_OR_NEGATIVE_VALUE, size: sizeAdditional },
   ],
 ];
 

@@ -6,6 +6,15 @@ import {
   SIGN,
   CHANGE_STATE,
   EQUALLY,
+  COMMA,
+  CLEAR,
+  LEFT_BRACKET,
+  RIGHT_BRACKET,
+  POSITIVE_OR_NEGATIVE,
+  LEFT_BRACKET_VALUE,
+  RIGHT_BRACKET_VALUE,
+  COMMA_VALUE,
+  REMOVE,
 } from "./types";
 
 export function calc(value) {
@@ -13,7 +22,6 @@ export function calc(value) {
 }
 
 export function addSing(value) {
-  debugger;
   return { type: ADD_SIGN, payload: { payload: value, type: SIGN } };
 }
 
@@ -29,23 +37,26 @@ export function equally() {
   return { type: EQUALLY };
 }
 
-function switchSign(val) {
-  switch (val) {
-    case "=":
-      return { type: EQUALLY };
-    case ",":
-      break;
-    case "C":
-      break;
-    case "AC":
-      break;
-    case "(":
-      break;
-    case ")":
-      break;
-    case "+/-":
-      break;
-    default:
-      return;
-  }
+export function comma() {
+  return { type: COMMA, payload: { payload: COMMA_VALUE, type: SIGN } };
+}
+
+export function clear() {
+  return { type: CLEAR };
+}
+
+export function leftBracket() {
+  return { type: LEFT_BRACKET, payload: { payload: LEFT_BRACKET_VALUE, type: SIGN } };
+}
+
+export function rightBracket() {
+  return { type: RIGHT_BRACKET, payload: { payload: RIGHT_BRACKET_VALUE, type: SIGN } };
+}
+
+export function positiveOrNegative() {
+  return { type: POSITIVE_OR_NEGATIVE };
+}
+
+export function removeValue() {
+  return { type: REMOVE };
 }

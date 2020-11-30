@@ -1,13 +1,11 @@
-import {put, takeEvery} from 'redux-saga/effects'
+import { put, takeEvery } from 'redux-saga/effects'
 import { equally } from '../actions';
 import { EQUALLY } from '../types'
 
-export function* resultSagaWatcher(){
-    debugger;
+export function* resultSagaWatcher() {
     //yield takeEvery(EQUALLY, resultSagaWorker);
 }
 
-function* resultSagaWorker(){
-    debugger;
+function* resultSagaWorker() {
     yield put(equally());
 }
