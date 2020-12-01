@@ -17,15 +17,15 @@ import {
   REMOVE,
   PRE_EQUALLY,
   TOGGLE_PRE_RESULT,
-  EVAL_RESULT
+  ADD_VALUES_BY_INPUT
 } from "./types";
 
 export function calc(value) {
   return { type: CALC, payload: value };
 }
 
-export function evalResult(value) {
-  return { type: EVAL_RESULT, payload: value }
+export function addValuesByInput(value) {
+  return { type: ADD_VALUES_BY_INPUT, payload: value }
 }
 
 export function addSing(value) {

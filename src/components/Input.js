@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
-import { evalResult } from "../redux/actions";
+import { addValuesByInput } from "../redux/actions";
 
 export default ({ input, defalutValue, value }) => {
   const dispatch = useDispatch();
 
   const inputChangedHandler = (event) => {
     event.preventDefault();
-    dispatch(evalResult(event.currentTarget.value));
+    dispatch(addValuesByInput(event.currentTarget.value));
   }
 
   return (

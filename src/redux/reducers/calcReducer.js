@@ -15,7 +15,7 @@ import {
   REMOVE,
   PRE_EQUALLY,
   TOGGLE_PRE_RESULT,
-  EVAL_RESULT
+  ADD_VALUES_BY_INPUT
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
@@ -46,8 +46,8 @@ export const calcReducer = (state = initialState, action) => {
       return _preResult();
     case TOGGLE_PRE_RESULT:
       return _changeFlagPreResult();
-    case EVAL_RESULT:
-      return _evalResultByInputVal();
+    case ADD_VALUES_BY_INPUT:
+      return _setValuesByInput();
     default:
       return state;
   }
@@ -56,12 +56,12 @@ export const calcReducer = (state = initialState, action) => {
     return { ...state, values: [], result: "" };
   }
 
-  function _evalResultByInputVal() {
+  function _setValuesByInput() {
     const values = action.payload.split("");
     state.values = values.map((item) => {
       return { payload: item, type: getType(item) }
     });
-    return { ...state };
+    return _preResult();
   }
 
   function _setSign() {
@@ -94,19 +94,19 @@ export const calcReducer = (state = initialState, action) => {
   }
 
   function _setResult() {
-    const result = state.values.reduce((sum, val) => {
-      if (val.type !== INIT) {
-        return sum + val.payload;
-      }
-      return sum;
-    }, 0).substring(1);
     try {
+      const result = state.values.reduce((sum, val) => {
+        if (val.type !== INIT) {
+          return sum + val.payload;
+        }
+        return sum;
+      }, 0).substring(1);
       return {
         ...state,
         result: evalResult(result),
       };
     } catch (error) {
-      return state;
+      return { ...state };
     }
   }
 
@@ -114,7 +114,7 @@ export const calcReducer = (state = initialState, action) => {
     if (state.preResult) {
       return _setResult();
     }
-    return state;
+    return { ...state };
   }
 
   function _changeLastVal() {
