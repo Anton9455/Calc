@@ -11,7 +11,9 @@ import {
   POSITIVE_OR_NEGATIVE,
   LEFT_BRACKET_VALUE,
   SIGN,
-  REMOVE
+  REMOVE,
+  PRE_EQUALLY,
+  TOGGLE_PRE_RESULT
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
@@ -38,6 +40,10 @@ export const calcReducer = (state = initialState, action) => {
       return changeLastVal();
     case REMOVE:
       return removeLastValue();
+    case PRE_EQUALLY:
+      return setPreResult();
+    case TOGGLE_PRE_RESULT:
+      return changeFlagPreResult();
     default:
       return state;
   }
@@ -82,10 +88,21 @@ export const calcReducer = (state = initialState, action) => {
       }
       return sum;
     }, 0).substring(1);
-    return {
-      ...state,
-      result: evalResult(result),
-    };
+    try {
+      return {
+        ...state,
+        result: evalResult(result),
+      };
+    } catch (error) {
+      return state;
+    }
+  }
+
+  function setPreResult() {
+    if (state.preResult) {
+      return setResult();
+    }
+    return state;
   }
 
   function changeLastVal() {
@@ -98,6 +115,11 @@ export const calcReducer = (state = initialState, action) => {
 
   function removeLastValue() {
     state.values.splice(-1, 1);
+    return { ...state };
+  }
+
+  function changeFlagPreResult() {
+    state.preResult = !state.preResult
     return { ...state };
   }
 

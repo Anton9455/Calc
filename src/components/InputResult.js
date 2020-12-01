@@ -3,7 +3,7 @@ import Input from "./Input";
 
 const Result = ({ input, result }) => {
   return (
-    <div className="col">
+    <div className="col-2">
       <div className="row">
         <Input input={input} value={result} />
       </div>

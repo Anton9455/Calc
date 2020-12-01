@@ -15,6 +15,8 @@ import {
   RIGHT_BRACKET_VALUE,
   COMMA_VALUE,
   REMOVE,
+  PRE_EQUALLY,
+  TOGGLE_PRE_RESULT
 } from "./types";
 
 export function calc(value) {
@@ -59,4 +61,12 @@ export function positiveOrNegative() {
 
 export function removeValue() {
   return { type: REMOVE };
+}
+
+export function preEqualy() {
+  return {type: PRE_EQUALLY};
+}
+
+export function togglePreResult() {
+  return {type: TOGGLE_PRE_RESULT}
 }
