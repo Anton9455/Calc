@@ -54,7 +54,7 @@ export default () => {
     <div className="container d-flex flex-column justify-content-center w-50 vh-100">
       <div className="row">
         <div className="col pre-result-check">
-          <input type="checkbox" className="container-check-input" id="preResult" onClick={()=>dispatch(togglePreResult())}/>
+          <input type="checkbox" className="container-check-input" id="preResult" onClick={() => dispatch(togglePreResult())} />
           <label className="container-check-input pl-1" htmlFor="preResult">Автоматический расчет</label>
         </div>
       </div>

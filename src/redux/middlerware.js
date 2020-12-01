@@ -1,3 +1,4 @@
+import { getType } from "../utils/utils";
 import { addSing, addNum, changeState } from "./actions";
 import {
   CALC,
@@ -30,11 +31,6 @@ export function switchMiddleware({ dispatch, getState }) {
       return next(action);
     };
   };
-
-  function getType(str) {
-    if (typeof str != "string") return false;
-    return !isNaN(str) && !isNaN(parseFloat(str)) ? NUMBER : SIGN;
-  }
 
   function prepareCalc(current, last) {
     const additional = ["=", ",", "C", "AC", "(", ")", "+/-"];

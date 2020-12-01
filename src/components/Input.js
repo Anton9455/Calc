@@ -1,6 +1,13 @@
-export default ({ input, defalutValue, value }) => {
+import { useDispatch } from "react-redux";
+import { evalResult } from "../redux/actions";
 
-  const inputChangedHandler = (event) => { }
+export default ({ input, defalutValue, value }) => {
+  const dispatch = useDispatch();
+
+  const inputChangedHandler = (event) => {
+    event.preventDefault();
+    dispatch(evalResult(event.currentTarget.value));
+  }
 
   return (
     <div className={input.style}>

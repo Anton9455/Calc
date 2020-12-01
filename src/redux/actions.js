@@ -16,11 +16,16 @@ import {
   COMMA_VALUE,
   REMOVE,
   PRE_EQUALLY,
-  TOGGLE_PRE_RESULT
+  TOGGLE_PRE_RESULT,
+  EVAL_RESULT
 } from "./types";
 
 export function calc(value) {
   return { type: CALC, payload: value };
+}
+
+export function evalResult(value) {
+  return { type: EVAL_RESULT, payload: value }
 }
 
 export function addSing(value) {
@@ -64,9 +69,9 @@ export function removeValue() {
 }
 
 export function preEqualy() {
-  return {type: PRE_EQUALLY};
+  return { type: PRE_EQUALLY };
 }
 
 export function togglePreResult() {
-  return {type: TOGGLE_PRE_RESULT}
+  return { type: TOGGLE_PRE_RESULT }
 }

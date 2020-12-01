@@ -8,7 +8,7 @@ export function* resultSagaWatcher() {
 
 function* resultSagaWorker() {
     const statePreResult = yield select(state => state.calc.preResult);
-    if(statePreResult){
+    if (statePreResult) {
         yield put(preEqualy());
     }
 }

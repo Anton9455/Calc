@@ -1,3 +1,4 @@
+import { getType } from "../../utils/utils";
 import {
   ADD_SIGN,
   ADD_NUMBER,
@@ -13,7 +14,8 @@ import {
   SIGN,
   REMOVE,
   PRE_EQUALLY,
-  TOGGLE_PRE_RESULT
+  TOGGLE_PRE_RESULT,
+  EVAL_RESULT
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
@@ -21,53 +23,63 @@ const initialState = { values: [{ payload: "", type: INIT }] };
 export const calcReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_SIGN:
-      return setSign();
+      return _setSign();
     case ADD_NUMBER:
-      return setNumber();
+      return _setNumber();
     case CHANGE_STATE:
-      return changeValue();
+      return _changeValue();
     case EQUALLY:
-      return setResult();
+      return _setResult();
     case COMMA:
-      return setSign();
+      return _setSign();
     case CLEAR:
-      return clearValues();
+      return _clearValues();
     case LEFT_BRACKET:
-      return setLeftBracket();
+      return _setLeftBracket();
     case RIGHT_BRACKET:
-      return setRightBracket();
+      return _setRightBracket();
     case POSITIVE_OR_NEGATIVE:
-      return changeLastVal();
+      return _changeLastVal();
     case REMOVE:
-      return removeLastValue();
+      return _remove();
     case PRE_EQUALLY:
-      return setPreResult();
+      return _preResult();
     case TOGGLE_PRE_RESULT:
-      return changeFlagPreResult();
+      return _changeFlagPreResult();
+    case EVAL_RESULT:
+      return _evalResultByInputVal();
     default:
       return state;
   }
 
-  function clearValues() {
+  function _clearValues() {
     return { ...state, values: [], result: "" };
   }
 
-  function setSign() {
+  function _evalResultByInputVal() {
+    const values = action.payload.split("");
+    state.values = values.map((item) => {
+      return { payload: item, type: getType(item) }
+    });
+    return { ...state };
+  }
+
+  function _setSign() {
     return setValue();
   }
 
-  function setLeftBracket() {
-    return setSign();
+  function _setLeftBracket() {
+    return _setSign();
   }
 
-  function setRightBracket() {
+  function _setRightBracket() {
     if (state.values.some(item => item.payload === LEFT_BRACKET_VALUE)) {
-      return setSign();
+      return _setSign();
     }
     return state;
   }
 
-  function setNumber() {
+  function _setNumber() {
     return setValue();
   }
 
@@ -76,12 +88,12 @@ export const calcReducer = (state = initialState, action) => {
     return { ...state, values: [...state.values, action.payload] };
   }
 
-  function changeValue() {
+  function _changeValue() {
     state.values.splice(-1, 1);
     return setValue();
   }
 
-  function setResult() {
+  function _setResult() {
     const result = state.values.reduce((sum, val) => {
       if (val.type !== INIT) {
         return sum + val.payload;
@@ -98,14 +110,14 @@ export const calcReducer = (state = initialState, action) => {
     }
   }
 
-  function setPreResult() {
+  function _preResult() {
     if (state.preResult) {
-      return setResult();
+      return _setResult();
     }
     return state;
   }
 
-  function changeLastVal() {
+  function _changeLastVal() {
     let lastVal = state.values[state.values.length - 1];
     if (lastVal.type !== INIT && lastVal.type !== SIGN) {
       lastVal.payload = (lastVal.payload * -1).toString();
@@ -113,12 +125,12 @@ export const calcReducer = (state = initialState, action) => {
     return { ...state };
   }
 
-  function removeLastValue() {
+  function _remove() {
     state.values.splice(-1, 1);
     return { ...state };
   }
 
-  function changeFlagPreResult() {
+  function _changeFlagPreResult() {
     state.preResult = !state.preResult
     return { ...state };
   }
