@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { addValuesByInput } from "../redux/actions";
+import { prepareInput } from "../utils/utils";
 
 export default ({ input, defalutValue, value }) => {
   const dispatch = useDispatch();
@@ -19,6 +20,9 @@ export default ({ input, defalutValue, value }) => {
         defaultValue={defalutValue}
         value={value}
         onChange={(event) => inputChangedHandler(event)}
+        onKeyPress={(event)=>{
+          event.currentTarget.value = prepareInput(event.currentTarget.value);
+        }}
       />
     </div>
   );
