@@ -15,7 +15,7 @@ import {
   REMOVE,
   PRE_EQUALLY,
   TOGGLE_PRE_RESULT,
-  ADD_VALUES_BY_INPUT
+  ADD_VALUES_BY_INPUT,
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
@@ -59,7 +59,7 @@ export const calcReducer = (state = initialState, action) => {
   function _setValuesByInput() {
     const values = action.payload.split("");
     state.values = values.map((item) => {
-      return { payload: item, type: getType(item) }
+      return { payload: item, type: getType(item) };
     });
     return _preResult();
   }
@@ -73,7 +73,7 @@ export const calcReducer = (state = initialState, action) => {
   }
 
   function _setRightBracket() {
-    if (state.values.some(item => item.payload === LEFT_BRACKET_VALUE)) {
+    if (state.values.some((item) => item.payload === LEFT_BRACKET_VALUE)) {
       return _setSign();
     }
     return state;
@@ -83,24 +83,26 @@ export const calcReducer = (state = initialState, action) => {
     return setValue();
   }
 
-
-  function setValue() {
-    return { ...state, values: [...state.values, action.payload] };
+  function setValue(values = state.values) {
+    return { ...state, values: [...values, action.payload] };
   }
 
   function _changeValue() {
-    state.values.splice(-1, 1);
-    return setValue();
+    let values = state.values;
+    values.splice(-1, 1);
+    return setValue(values);
   }
 
   function _setResult() {
     try {
-      const result = state.values.reduce((sum, val) => {
-        if (val.type !== INIT) {
-          return sum + val.payload;
-        }
-        return sum;
-      }, 0).substring(1);
+      const result = state.values
+        .reduce((sum, val) => {
+          if (val.type !== INIT) {
+            return sum + val.payload;
+          }
+          return sum;
+        }, 0)
+        .substring(1);
       return {
         ...state,
         result: evalResult(result),
@@ -126,16 +128,16 @@ export const calcReducer = (state = initialState, action) => {
   }
 
   function _remove() {
-    state.values.splice(-1, 1);
-    return { ...state };
+    let values = state.values;
+    values.splice(-1, 1);
+    return { ...state, values };
   }
 
   function _changeFlagPreResult() {
-    state.preResult = !state.preResult
-    return { ...state };
+    return { ...state, preResult: !state.preResult };
   }
 
   function evalResult(fn) {
-    return new Function('return ' + fn)();
+    return new Function("return " + fn)();
   }
 };
