@@ -26,6 +26,7 @@ export const POSITIVE_OR_NEGATIVE = 'POSITIVE_OR_NEGATIVE'
 
 export const LEFT_BRACKET_VALUE = "(";
 export const RIGHT_BRACKET_VALUE = ")";
+export const COMMA_VALUE_ALTERNATIVE = ",";
 export const COMMA_VALUE = ".";
 export const REMOVE_VALUE = "⌫";
 export const CLEAR_VALUE = "C";

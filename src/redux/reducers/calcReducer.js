@@ -22,12 +22,18 @@ const initialState = { values: [{ payload: "", type: INIT }] };
 
 export const calcReducer = (state = initialState, action) => {
   switch (action.type) {
+//-------------------------------------------------------//
+            //Основные типы событий (циферблат)
+//-------------------------------------------------------//
     case ADD_SIGN:
       return _setSign();
     case ADD_NUMBER:
       return _setNumber();
     case CHANGE_STATE:
       return _changeValue();
+//-------------------------------------------------------//
+            //Расчетные типы событий (правая колонка)
+//-------------------------------------------------------//
     case EQUALLY:
       return _setResult();
     case COMMA:
@@ -42,6 +48,9 @@ export const calcReducer = (state = initialState, action) => {
       return _changeLastVal();
     case REMOVE:
       return _remove();
+//-------------------------------------------------------//
+            //Расчетные типы событий (динамическое вычисление, флаг динамического вычисления, ввод в инпут при динамическом вычислениии)
+//-------------------------------------------------------//
     case PRE_EQUALLY:
       return _preResult();
     case TOGGLE_PRE_RESULT:
@@ -56,27 +65,8 @@ export const calcReducer = (state = initialState, action) => {
     return { ...state, values: [], result: "" };
   }
 
-  function _setValuesByInput() {
-    const values = action.payload.split("");
-    state.values = values.map((item) => {
-      return { payload: item, type: getType(item) }
-    });
-    return _preResult();
-  }
-
   function _setSign() {
     return setValue();
-  }
-
-  function _setLeftBracket() {
-    return _setSign();
-  }
-
-  function _setRightBracket() {
-    if (state.values.some(item => item.payload === LEFT_BRACKET_VALUE)) {
-      return _setSign();
-    }
-    return state;
   }
 
   function _setNumber() {
@@ -91,6 +81,18 @@ export const calcReducer = (state = initialState, action) => {
   function _changeValue() {
     state.values.splice(-1, 1);
     return setValue();
+  }
+
+  function _setLeftBracket() {
+    return _setSign();
+  }
+
+  function _setRightBracket() {
+    //добавление закрывающей скобки только при наличии открывающей
+    if (state.values.some(item => item.payload === LEFT_BRACKET_VALUE)) {
+      return _setSign();
+    }
+    return state;
   }
 
   function _setResult() {
@@ -123,6 +125,14 @@ export const calcReducer = (state = initialState, action) => {
       lastVal.payload = (lastVal.payload * -1).toString();
     }
     return { ...state };
+  }
+
+  function _setValuesByInput() {
+    const values = action.payload.split("");
+    state.values = values.map((item) => {
+      return { payload: item, type: getType(item) }
+    });
+    return _preResult();
   }
 
   function _remove() {
