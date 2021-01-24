@@ -14,8 +14,7 @@ import {
   SIGN,
   REMOVE,
   PRE_EQUALLY,
-  TOGGLE_PRE_RESULT,
-  ADD_VALUES_BY_INPUT,
+  TOGGLE_PRE_RESULT
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
@@ -45,18 +44,18 @@ export const calcReducer = (state = initialState, action) => {
     case RIGHT_BRACKET:
       return _setRightBracket();
     case POSITIVE_OR_NEGATIVE:
-      return _changeLastVal();
+      return _positiveOrNegative();
     case REMOVE:
       return _remove();
 //-------------------------------------------------------//
-            //Расчетные типы событий (динамическое вычисление, флаг динамического вычисления, ввод в инпут при динамическом вычислениии)
+            //Расчетные типы событий 
+            //  (динамическое вычисление, 
+            //  флаг динамического вычисления)
 //-------------------------------------------------------//
     case PRE_EQUALLY:
       return _preResult();
     case TOGGLE_PRE_RESULT:
       return _changeFlagPreResult();
-    case ADD_VALUES_BY_INPUT:
-      return _setValuesByInput();
     default:
       return state;
   }
@@ -74,11 +73,13 @@ export const calcReducer = (state = initialState, action) => {
   }
 
   function setValue(values = state.values) {
+    debugger;
     return { ...state, values: [...values, action.payload] };
   }
 
   function _changeValue() {
-    let values = state.values;
+    debugger
+    let values = {...state.values};
     values.splice(-1, 1);
     return setValue(values);
   }
@@ -95,9 +96,30 @@ export const calcReducer = (state = initialState, action) => {
     return state;
   }
 
-  function _setResult() {
+  function _positiveOrNegative() {
+    let lastVal = state.values[state.values.length - 1];
+    if (lastVal.type !== INIT && lastVal.type !== SIGN) {
+      lastVal.payload = (lastVal.payload * -1).toString();
+    }
+    return { ...state };
+  }
+
+  function _remove() {
+    let values = [...state.values];
+    values.splice(-1, 1);
+    return { ...state, values };
+  }
+
+  function _changeFlagPreResult() {
+    return { ...state, preResult: !state.preResult };
+  }
+
+  function _setResult(values = state.values) {
+    debugger;
+    //формирование результрующей строки из значений в сторе
+    //и ее вычисление
     try {
-      const result = state.values
+      const result = values
         .reduce((sum, val) => {
           if (val.type !== INIT) {
             return sum + val.payload;
@@ -107,47 +129,24 @@ export const calcReducer = (state = initialState, action) => {
         .substring(1);
       return {
         ...state,
-        result: evalResult(result),
+        result: _evalResult(result),
+        values
       };
     } catch (error) {
+      console.error(error);
       return { ...state };
     }
   }
 
-  function _preResult() {
-    if (state.preResult) {
-      return _setResult();
+  function _preResult(values = action.payload) {
+    debugger;
+    if (state.preResult && values) {
+      return _setResult(values);
     }
     return { ...state };
   }
 
-  function _changeLastVal() {
-    let lastVal = state.values[state.values.length - 1];
-    if (lastVal.type !== INIT && lastVal.type !== SIGN) {
-      lastVal.payload = (lastVal.payload * -1).toString();
-    }
-    return { ...state };
-  }
-
-  function _setValuesByInput() {
-    const values = action.payload.split("");
-    state.values = values.map((item) => {
-      return { payload: item, type: getType(item) }
-    });
-    return _preResult();
-  }
-
-  function _remove() {
-    let values = state.values;
-    values.splice(-1, 1);
-    return { ...state, values };
-  }
-
-  function _changeFlagPreResult() {
-    return { ...state, preResult: !state.preResult };
-  }
-
-  function evalResult(fn) {
+  function _evalResult(fn) {
     return new Function("return " + fn)();
   }
 };

@@ -6,6 +6,7 @@ export default ({ input, defalutValue, value }) => {
   const dispatch = useDispatch();
 
   const inputChangedHandler = (event) => {
+    debugger;
     event.preventDefault();
     dispatch(addValuesByInput(event.currentTarget.value));
   }

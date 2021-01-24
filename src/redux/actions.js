@@ -25,7 +25,7 @@ export function calc(value) {
 }
 
 export function addValuesByInput(value) {
-  return { type: ADD_VALUES_BY_INPUT, payload: value }
+  return { type: ADD_VALUES_BY_INPUT, payload: {payload: value, type: PRE_EQUALLY} }
 }
 
 export function addSing(value) {
@@ -68,8 +68,8 @@ export function removeValue() {
   return { type: REMOVE };
 }
 
-export function preEqualy() {
-  return { type: PRE_EQUALLY };
+export function preEqualy(values) {
+  return { type: PRE_EQUALLY, payload: values };
 }
 
 export function togglePreResult() {
