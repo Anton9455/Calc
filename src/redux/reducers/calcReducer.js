@@ -14,7 +14,8 @@ import {
   SIGN,
   REMOVE,
   PRE_EQUALLY,
-  TOGGLE_PRE_RESULT
+  TOGGLE_PRE_RESULT,
+  RIGHT_BRACKET_VALUE
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
@@ -53,7 +54,7 @@ export const calcReducer = (state = initialState, action) => {
             //  флаг динамического вычисления)
 //-------------------------------------------------------//
     case PRE_EQUALLY:
-      return _preResult();
+      return _preResult(action.payload);
     case TOGGLE_PRE_RESULT:
       return _changeFlagPreResult();
     default:
@@ -73,13 +74,11 @@ export const calcReducer = (state = initialState, action) => {
   }
 
   function setValue(values = state.values) {
-    debugger;
     return { ...state, values: [...values, action.payload] };
   }
 
   function _changeValue() {
-    debugger
-    let values = {...state.values};
+    let values = [...state.values];
     values.splice(-1, 1);
     return setValue(values);
   }
@@ -114,10 +113,13 @@ export const calcReducer = (state = initialState, action) => {
     return { ...state, preResult: !state.preResult };
   }
 
-  function _setResult(values = state.values) {
-    debugger;
+  function _setResult(values = [...state.values]) {
     //формирование результрующей строки из значений в сторе
     //и ее вычисление
+    if(_invalidCalc(values)){ //проверка наличия значений и валидности скобок
+      return { ...state };
+    }
+
     try {
       const result = values
         .reduce((sum, val) => {
@@ -133,13 +135,21 @@ export const calcReducer = (state = initialState, action) => {
         values
       };
     } catch (error) {
+      alert("Ошибка вычисления, проверьте введенные значения");
       console.error(error);
       return { ...state };
     }
+
+    function _invalidCalc(values) {
+      return !values.length ||
+             (values.length === 1 && values[0].type === INIT) ||
+             (values.slice(-1)[0].type === SIGN) ||
+             (values.some(item => item.payload === LEFT_BRACKET_VALUE) && !values.some(item => item.payload === RIGHT_BRACKET_VALUE))
+    }
+
   }
 
-  function _preResult(values = action.payload) {
-    debugger;
+  function _preResult(values = [...state.values]) {
     if (state.preResult && values) {
       return _setResult(values);
     }

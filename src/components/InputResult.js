@@ -11,6 +11,6 @@ const Result = ({ input, result }) => {
   );
 };
 
-const mapStateToProps = state => ({ result: state.calc.result })
+const mapStateToProps = state => ({ result: state.calc.result || 0 })
 
 export default connect(mapStateToProps, null)(Result);

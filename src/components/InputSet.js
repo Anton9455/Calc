@@ -8,7 +8,6 @@ const InputSet = ({ input, inputSet }) => {
 
 const mapStateToProps = (state) => {
   let values = [...state.calc.values]
-  debugger;
   let inputSet = values
     .reduce((sum, val) => {
       if (val.type !== INIT) {
