@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { INIT } from "../redux/types";
+import { concatValues } from "../utils/utils";
 import Input from "./Input";
 
 const InputSet = ({ input, inputSet }) => {
@@ -8,13 +8,7 @@ const InputSet = ({ input, inputSet }) => {
 
 const mapStateToProps = (state) => {
   let values = [...state.calc.values]
-  let inputSet = values
-    .reduce((sum, val) => {
-      if (val.type !== INIT) {
-        return sum + val.payload;
-      }
-      return sum;
-    }, 0);
+  let inputSet = concatValues(values)
   inputSet = inputSet ? inputSet.substring(1) : inputSet;
   return {
     inputSet: inputSet,

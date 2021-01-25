@@ -23,8 +23,8 @@ function* resultSagaWorker({ payload }) {
   const sagaAction = { ...payload };
   let values;
   const statePreResult = yield select((state) => state.calc.preResult);
-  if (statePreResult) {
-    if (PRE_EQUALLY === sagaAction?.type) {
+  if (statePreResult) { // условие предварительного расчета
+    if (PRE_EQUALLY === sagaAction?.type) { //условие ввода с клавиатуры
       values = _parse(sagaAction.payload);
       let lastValue = values.slice(-1)[0];
       let result = _prepare(

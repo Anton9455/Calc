@@ -1,4 +1,4 @@
-import { getType } from "../../utils/utils";
+import { concatValues } from "../../utils/utils";
 import {
   ADD_SIGN,
   ADD_NUMBER,
@@ -15,25 +15,25 @@ import {
   REMOVE,
   PRE_EQUALLY,
   TOGGLE_PRE_RESULT,
-  RIGHT_BRACKET_VALUE
+  RIGHT_BRACKET_VALUE,
 } from "../types";
 
 const initialState = { values: [{ payload: "", type: INIT }] };
 
 export const calcReducer = (state = initialState, action) => {
   switch (action.type) {
-//-------------------------------------------------------//
-            //Основные типы событий (циферблат)
-//-------------------------------------------------------//
+    //-------------------------------------------------------//
+    //Основные типы событий (циферблат)
+    //-------------------------------------------------------//
     case ADD_SIGN:
       return _setSign();
     case ADD_NUMBER:
       return _setNumber();
     case CHANGE_STATE:
       return _changeValue();
-//-------------------------------------------------------//
-            //Расчетные типы событий (правая колонка)
-//-------------------------------------------------------//
+    //-------------------------------------------------------//
+    //Расчетные типы событий (правая колонка)
+    //-------------------------------------------------------//
     case EQUALLY:
       return _setResult();
     case COMMA:
@@ -48,11 +48,11 @@ export const calcReducer = (state = initialState, action) => {
       return _positiveOrNegative();
     case REMOVE:
       return _remove();
-//-------------------------------------------------------//
-            //Расчетные типы событий 
-            //  (динамическое вычисление, 
-            //  флаг динамического вычисления)
-//-------------------------------------------------------//
+    //-------------------------------------------------------//
+    //Расчетные типы событий
+    //  (динамическое вычисление,
+    //  флаг динамического вычисления)
+    //-------------------------------------------------------//
     case PRE_EQUALLY:
       return _preResult(action.payload);
     case TOGGLE_PRE_RESULT:
@@ -89,7 +89,7 @@ export const calcReducer = (state = initialState, action) => {
 
   function _setRightBracket() {
     //добавление закрывающей скобки только при наличии открывающей
-    if (state.values.some(item => item.payload === LEFT_BRACKET_VALUE)) {
+    if (state.values.some((item) => item.payload === LEFT_BRACKET_VALUE)) {
       return _setSign();
     }
     return state;
@@ -116,23 +116,16 @@ export const calcReducer = (state = initialState, action) => {
   function _setResult(values = [...state.values]) {
     //формирование результрующей строки из значений в сторе
     //и ее вычисление
-    if(_invalidCalc(values)){ //проверка наличия значений и валидности скобок
+    if (_invalidCalc(values)) {//проверка наличия значений, его корректности и валидности скобок
       return { ...state };
     }
 
     try {
-      const result = values
-        .reduce((sum, val) => {
-          if (val.type !== INIT) {
-            return sum + val.payload;
-          }
-          return sum;
-        }, 0)
-        .substring(1);
+      const result = concatValues(values).substring(1);
       return {
         ...state,
         result: _evalResult(result),
-        values
+        values,
       };
     } catch (error) {
       alert("Ошибка вычисления, проверьте введенные значения");
@@ -141,12 +134,13 @@ export const calcReducer = (state = initialState, action) => {
     }
 
     function _invalidCalc(values) {
-      return !values.length ||
-             (values.length === 1 && values[0].type === INIT) ||
-             (values.slice(-1)[0].type === SIGN) ||
-             (values.some(item => item.payload === LEFT_BRACKET_VALUE) && !values.some(item => item.payload === RIGHT_BRACKET_VALUE))
+      return (
+        !values.length ||
+        (values.length === 1 && values[0].type === INIT) ||
+        values.slice(-1)[0].type === SIGN ||
+        (values.some((item) => item.payload === LEFT_BRACKET_VALUE) && !values.some((item) => item.payload === RIGHT_BRACKET_VALUE))
+      );
     }
-
   }
 
   function _preResult(values = [...state.values]) {
